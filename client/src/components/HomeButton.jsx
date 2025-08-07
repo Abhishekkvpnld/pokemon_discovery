@@ -11,7 +11,7 @@ const HomeButton = () => {
             whileTap={{ scale: 0.95 }}
         >
             <Link
-                to="/pokemon"  // ✅ Use `to` instead of `href` in react-router-dom
+                to="/pokemon" 
                 className="px-6 py-2 bg-green-500 text-white rounded-xl shadow-md hover:bg-green-600 transition duration-300"
             >
                 Show All

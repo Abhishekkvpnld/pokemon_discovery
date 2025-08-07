@@ -1,45 +1,50 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-const fetchPokemonsList = async () => {
-  const api = "https://pokeapi.co/api/v2/pokemon";
-  const response = await axios.get(api);
-  return response?.data?.results;
-};
+// Fetch 6 Pokémon list (URLs) per page using limit & offset
+const fetchPokemonPage = async ({ pageParam = 0 }) => {
+  const limit = 6;
+  const res = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${pageParam}`);
+  const pokemonList = res.data.results;
 
-const fetchPokemonDetails = async (urls) => {
-  const responses = await Promise.all(urls?.map((url) => axios.get(url)));
-  return responses?.map((res) => res?.data);
+  // Fetch details of each Pokémon
+  const details = await Promise.all(pokemonList?.map(p => axios.get(p?.url)));
+  const fullData = details?.map(d => d.data);
+
+  return {
+    pokemons: fullData,
+    nextOffset: pageParam + limit,
+    hasMore: !!res.data.next,
+  };
 };
 
 const useDataFetch = () => {
-  // Get the list of Pokémon URLs
   const {
-    data: pokemonList,
+    data,
     error,
+    fetchNextPage,
+    hasNextPage,
     isLoading,
-    isSuccess,
-  } = useQuery({
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery({
     queryKey: ["pokemonList"],
-    queryFn: fetchPokemonsList,
+    queryFn: fetchPokemonPage,
+    getNextPageParam: (lastPage) =>
+      lastPage.hasMore ? lastPage.nextOffset : undefined,
   });
 
-  // Get full data for each Pokémon
-  const {
-    data: allPokemonsData,
-    isLoading: isDetailsLoading,
-    isSuccess: isDetailsSuccess,
-  } = useQuery({
-    queryKey: ["pokemonDetails", pokemonList],
-    queryFn: () => fetchPokemonDetails(pokemonList?.map((p) => p?.url)),
-    enabled: !!pokemonList, // only run when pokemonList is available
-  });
+  // Combine all pages into one array
+  const allPokemonsData = data?.pages?.flatMap(page => page.pokemons);
 
   return {
     allPokemonsData,
-    isLoading: isLoading || isDetailsLoading,
-    isSuccess: isSuccess && isDetailsSuccess,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
     error,
+    isSuccess: status === "success",
   };
 };
 

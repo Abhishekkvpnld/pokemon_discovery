@@ -43,6 +43,7 @@ const PokemonCard = ({ pokemon, collection = false, handleDelete }) => {
             <img
                 src={pokemon?.sprites?.front_default}
                 alt={pokemon?.name}
+                loading="lazy"
                 className="mx-auto h-40 w-40"
             />
             <h2 className="font-bold capitalize text-lg mt-2">{pokemon?.name}</h2>
@@ -78,9 +79,9 @@ const PokemonCard = ({ pokemon, collection = false, handleDelete }) => {
             </div>
 
             {
-                    <div onClick={() => collection ? handleDelete(pokemon?.id) : handleAddToCollections(pokemon)} title={`${!availableInCollection ? 'Add To Collection' : "Remove From Collection"}`} className={`absolute hover:animate-pulse cursor-pointer border-gray-300 ${availableInCollection ? "bg-red-600 p-0.5" : 'bg-green-600'} flex items-center justify-center top-0 right-0 m-3 border rounded-full`}>
+                    <div onClick={() => collection ? handleDelete(pokemon?.id) : handleAddToCollections(pokemon)} title={`${!availableInCollection ? 'Add To Collection' : "Remove From Collection"}`} className={`absolute hover:animate-pulse cursor-pointer border-gray-300 ${availableInCollection ? "bg-red-600 p-1" : 'bg-green-600'} flex items-center justify-center top-0 right-0 m-3 border rounded-full`}>
                         {
-                            availableInCollection ? <Trash2 className="font-bold hover:scale-105 transition-all" color="white" /> : <Plus className="font-bold hover:scale-105 transition-all" color="white" />
+                            availableInCollection ? <Trash2 size={20} className="font-bold hover:scale-105 transition-all" color="white" /> : <Plus className="font-bold hover:scale-105 transition-all" color="white" />
                         }
                     </div>             
             }

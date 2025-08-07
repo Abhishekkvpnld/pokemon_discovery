@@ -45,7 +45,7 @@ const MyCollections = () => {
   return (
     <>
       <Navbar />
-      <div className="p-4">
+      <div className="p-4 bg-slate-200 min-h-[100vh]">
         <h2 className="text-xl font-bold text-slate-400 mb-4">My Saved Pokémon</h2>
 
         {collections?.length === 0 ? (
