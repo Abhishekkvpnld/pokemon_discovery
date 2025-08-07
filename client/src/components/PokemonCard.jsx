@@ -1,12 +1,15 @@
 import { Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 
 
-const PokemonCard = ({ pokemon, collection = false }) => {
+const PokemonCard = ({ pokemon, collection = false, handleDelete }) => {
 
     const [availableInCollection, setAvailableInCollection] = useState(false);
 
+
+    //Add to collections
     const handleAddToCollections = (pokemon) => {
         const existing = JSON.parse(localStorage.getItem('pokemon_collections')) || [];
 
@@ -17,10 +20,12 @@ const PokemonCard = ({ pokemon, collection = false }) => {
             // Remove from collection
             updated = existing.filter(p => p.name !== pokemon.name);
             setAvailableInCollection(false);
+            toast.error("Pokemon Removed From Collections")
         } else {
             // Add to collection
             updated = [...existing, pokemon];
             setAvailableInCollection(true);
+            toast.success("Pokemon Added to Collections")
         }
         localStorage.setItem('pokemon_collections', JSON.stringify(updated));
     };
@@ -73,13 +78,11 @@ const PokemonCard = ({ pokemon, collection = false }) => {
             </div>
 
             {
-                !collection && (
-                    <div onClick={() => handleAddToCollections(pokemon)} title={`${!availableInCollection ? 'Add To Collection' : "Remove From Collection"}`} className={`absolute hover:animate-pulse cursor-pointer border-gray-300 ${availableInCollection ? "bg-red-600 p-0.5" : 'bg-green-600'} flex items-center justify-center top-0 right-0 m-3 border rounded-full`}>
+                    <div onClick={() => collection ? handleDelete(pokemon?.id) : handleAddToCollections(pokemon)} title={`${!availableInCollection ? 'Add To Collection' : "Remove From Collection"}`} className={`absolute hover:animate-pulse cursor-pointer border-gray-300 ${availableInCollection ? "bg-red-600 p-0.5" : 'bg-green-600'} flex items-center justify-center top-0 right-0 m-3 border rounded-full`}>
                         {
                             availableInCollection ? <Trash2 className="font-bold hover:scale-105 transition-all" color="white" /> : <Plus className="font-bold hover:scale-105 transition-all" color="white" />
                         }
-                    </div>
-                )
+                    </div>             
             }
         </div>
     );
