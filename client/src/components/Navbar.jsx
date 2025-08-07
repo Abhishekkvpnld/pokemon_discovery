@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Heart, Menu, X } from "lucide-react"; // lucide-react icons
+import { Heart, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ search, setSearch }) => {
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
-        <nav className="bg-white shadow-md px-4 py-3 flex items-center justify-between">
+        <nav className="bg-white shadow-md px-4 py-3 flex items-center justify-between w-full">
             {/* Left: Logo/Icon */}
             <Link to={"/"} className="flex items-center space-x-2">
                 <img src="/pokeball.png" alt="Logo" className="h-8 w-8 hover:animate-spin cursor-pointer transition-all" />
@@ -16,7 +16,7 @@ const Navbar = () => {
             {/* Center: Desktop Menu */}
             <ul className="hidden md:flex space-x-6 text-gray-700 font-medium">
                 <li className="hover:scale-110 transition-all">
-                    <a href="/">Home</a>
+                    <Link to="/">Home</Link>
                 </li>
             </ul>
 
@@ -35,6 +35,8 @@ const Navbar = () => {
                 {/* Search Box (visible on md and up) */}
                 <div className="hidden md:block">
                     <input
+                        value={search}
+                        onChange={(e) => setSearch(e?.target?.value)}
                         type="text"
                         placeholder="Search Pokémon..."
                         className="px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
@@ -60,6 +62,8 @@ const Navbar = () => {
                         <li>
                             <input
                                 type="text"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
                                 placeholder="Search Pokémon..."
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
@@ -67,18 +71,18 @@ const Navbar = () => {
 
                         {/* Menu Links */}
                         <li>
-                            <a href="/" className="block w-full">
+                            <Link to="/" className="block w-full">
                                 Home
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a
-                                href="/my-collections"
+                            <Link
+                                to="/my-collections"
                                 className="flex items-center justify-between w-full space-x-2"
                             >
                                 <span>My Collections</span>
                                 <Heart />
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
