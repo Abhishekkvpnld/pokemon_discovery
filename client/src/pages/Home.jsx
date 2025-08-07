@@ -6,7 +6,7 @@ const Home = () => {
 
   return (
     <div
-      className="flex flex-col items-center justify-center h-screen bg-yellow-100 bg-cover bg-center"
+      className="flex flex-col items-center justify-center h-screen bg-slate-100 bg-cover bg-center"
       style={{
         backgroundImage: "url('/pokemon.jpeg')",
       }}

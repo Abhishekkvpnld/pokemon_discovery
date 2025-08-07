@@ -1,0 +1,7 @@
+{
+    "routes": [
+      { "src": "/", "dest": "/" },
+      { "src": "/pokemon", "dest": "/" },
+      { "src": "/my-collections", "dest": "/" }
+    ]
+  }
